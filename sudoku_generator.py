@@ -23,7 +23,15 @@ class SudokuGenerator:
 	None
     '''
     def __init__(self, row_length, removed_cells):
-        pass
+        self.row_length = row_length
+        self.removed_cells = removed_cells
+        self.board = []
+        for i in range(row_length):
+            row = []
+            for j in range(row_length):
+                row.append(0)
+            self.board.append(row)
+        self.box_length = row_length ** 0.5
 
     '''
 	Returns a 2D python list of numbers which represents the board
@@ -32,7 +40,7 @@ class SudokuGenerator:
 	Return: list[list]
     '''
     def get_board(self):
-        pass
+        return self.board
 
     '''
 	Displays the board to the console
@@ -42,7 +50,8 @@ class SudokuGenerator:
 	Return: None
     '''
     def print_board(self):
-        pass
+        for i in self.board:
+            print(i)
 
     '''
 	Determines if num is contained in the specified row (horizontal) of the board
@@ -55,7 +64,9 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_row(self, row, num):
-        pass
+        if num in self.board[row]:
+            return False
+        return True
 
     '''
 	Determines if num is contained in the specified column (vertical) of the board
@@ -68,7 +79,10 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_col(self, col, num):
-        pass
+        for row in self.board:
+            if num in row[col]:
+                return False
+        return True
 
     '''
 	Determines if num is contained in the 3x3 box specified on the board
@@ -83,7 +97,11 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_box(self, row_start, col_start, num):
-        pass
+        for row in range(row_start, row_start + 3):
+            for col in range(col_start, col_start + 3):
+                if num == self.board[row][col]:
+                    return False
+        return True
     
     '''
     Determines if it is valid to enter num at (row, col) in the board
@@ -96,7 +114,25 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def is_valid(self, row, col, num):
-        pass
+        row_start = 0
+        if row < 4:
+            row_start = 1
+        elif row < 7:
+            row_start = 4
+        else:
+            row_start = 7
+
+        col_start = 0
+        if col < 4:
+            col_start = 1
+        elif col < 7:
+            col_start = 4
+        else:
+            col_start = 7
+
+        if self.valid_in_row(row, num) and self.valid_in_col(col, num) and self.valid_in_box(row_start, col_start, num):
+            return True
+        return False
 
     '''
     Fills the specified 3x3 box with values
